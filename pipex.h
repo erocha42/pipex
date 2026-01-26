@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: erocha-- <erocha--@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzorolinux <enzorolinux@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 13:36:31 by erocha--          #+#    #+#             */
-/*   Updated: 2026/01/22 13:51:54 by erocha--         ###   ########.fr       */
+/*   Updated: 2026/01/26 01:43:20 by enzorolinux      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 typedef struct s_data
 {
 	char	*path;
+    char    **command;
 	int		fd_infile;
 	int		fd_outfile;
 	pid_t	pid1;

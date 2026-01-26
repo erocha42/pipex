@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: erocha-- <erocha--@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzorolinux <enzorolinux@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 14:07:55 by erocha--          #+#    #+#             */
-/*   Updated: 2026/01/22 14:47:11 by erocha--         ###   ########.fr       */
+/*   Updated: 2026/01/26 01:57:40 by enzorolinux      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	**the_line(t_data *data, char **envp)
 	return (NULL);
 }
 
-static void	free_paths(char *linkls, char **paths)
+static void	free_paths(char *linkcommand, char **paths)
 {
 	int	i;
 
@@ -48,7 +48,7 @@ static void	free_paths(char *linkls, char **paths)
 		i++;
 	}
 	free(paths);
-	free(linkls);
+	free(linkcommand);
 }
 
 void	parsing(t_data *data, char *command, char **envp)
@@ -66,6 +66,7 @@ void	parsing(t_data *data, char *command, char **envp)
 		{
 			data->path = ft_strdup(linkcommand);
 			free_paths(linkcommand, paths);
+			free(command);
 			return ;
 		}
 		free(linkcommand);
@@ -73,7 +74,7 @@ void	parsing(t_data *data, char *command, char **envp)
 		i++;
 	}
 	free_paths(linkcommand, paths);
-	ft_putstr_fd("Command not found : ", 2);
-	ft_putendl_fd(command, 2);
+	free(command);
+	ft_putstr_fd("Command not found", 2);
 	clean_exit(data, 0);
 }
