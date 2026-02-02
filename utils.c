@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: erocha-- <erocha--@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzorolinux <enzorolinux@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 15:53:14 by erocha--          #+#    #+#             */
-/*   Updated: 2026/01/29 16:27:52 by erocha--         ###   ########.fr       */
+/*   Updated: 2026/02/02 20:19:50 by enzorolinux      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_stacks(char **stacks)
 	free(stacks);
 }
 
-void	clean(t_data *data)
+void	clean_exit(int code_error, t_data *data)
 {
 	if (data->command)
 		free_stacks(data->command);
@@ -35,4 +35,5 @@ void	clean(t_data *data)
 		close(data->end[0]);
 	if (data->end[1] > 2)
 		close(data->end[1]);
+    exit(code_error);
 }

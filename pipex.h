@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: erocha-- <erocha--@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzorolinux <enzorolinux@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 13:36:31 by erocha--          #+#    #+#             */
-/*   Updated: 2026/01/29 16:28:30 by erocha--         ###   ########.fr       */
+/*   Updated: 2026/02/02 20:20:19 by enzorolinux      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_data
 
 void	parsing(t_data *data, char *command, char **envp);
 void	free_stacks(char **stacks);
-void	clean(t_data *data);
+void	clean_exit(int code_error, t_data *data);
 
 #include "libft/libft.h"
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: erocha-- <erocha--@student.42.fr>          +#+  +:+       +#+        */
+/*   By: enzorolinux <enzorolinux@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 12:48:12 by erocha--          #+#    #+#             */
-/*   Updated: 2026/01/29 17:09:17 by erocha--         ###   ########.fr       */
+/*   Updated: 2026/02/02 21:08:13 by enzorolinux      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,18 @@ void	data_init(t_data *data)
 
 void	fork1(t_data *data, char **argv, char **envp)
 {
+    close(data->end[0]);
 	data->fd_infile = open(argv[1], O_RDONLY);
 	if (data->fd_infile < 0)
 	{
 		perror(argv[1]);
-		clean(data);
-		exit(1);
+		clean_exit(127, data);
 	}
 	data->command = ft_split(argv[2], ' ');
 	if (data->command == NULL || data->command[0] == NULL)
 	{
 		close(data->end[1]);
-		clean(data);
-		exit(127);
+		clean_exit(127, data);
 	}
 	if (access(data->command[0], F_OK) == 0)
 		data->path = ft_strdup(data->command[0]);
@@ -48,19 +47,21 @@ void	fork1(t_data *data, char **argv, char **envp)
 	close(data->end[1]);
 	execve(data->path, data->command, envp);
 	perror("execve");
-	clean(data);
-	exit(127);
+	clean_exit(127, data);
 }
 
 void	fork2(t_data *data, char **argv, char **envp)
 {
+    close(data->end[1]);
 	data->fd_outfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (data->fd_outfile < 0)
+    {
+        perror(argv[4]);
+        clean_exit(1, data);
+    }
 	data->command = ft_split(argv[3], ' ');
 	if (data->command == NULL || data->command[0] == NULL)
-	{
-		clean(data);
-		exit(127);
-	}
+	    clean_exit(127, data);
 	if (access(data->command[0], F_OK) == 0)
 		data->path = ft_strdup(data->command[0]);
 	else
@@ -71,8 +72,7 @@ void	fork2(t_data *data, char **argv, char **envp)
 	close(data->end[0]);
 	execve(data->path, data->command, envp);
 	perror("execve");
-	clean(data);
-	exit(127);
+	clean_exit(127, data);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -86,8 +86,7 @@ int	main(int argc, char **argv, char **envp)
 	if (pipe(data.end) == -1)
 	{
 		perror("pipe");
-		clean(&data);
-		exit(1);
+        clean_exit(1, &data);
 	}
 	data.pid1 = fork();
 	if (data.pid1 == 0)
@@ -102,7 +101,5 @@ int	main(int argc, char **argv, char **envp)
 	waitpid(data.pid2, &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	clean(&data);
-	exit(status);
-	return (status);
+	clean_exit(status, &data);
 }
