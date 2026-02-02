@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzorolinux <enzorolinux@student.42.fr>    +#+  +:+       +#+        */
+/*   By: erocha-- <erocha--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 14:07:55 by erocha--          #+#    #+#             */
-/*   Updated: 2026/01/26 01:57:40 by enzorolinux      ###   ########.fr       */
+/*   Updated: 2026/01/29 17:08:46 by erocha--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,21 @@
 static char	**the_line(t_data *data, char **envp)
 {
 	int	i;
-	int	j;
-	char *line;
 	
-	line = ft_strdup("PATH=");
 	i = 0;
+	if (!envp)
+    {
+		clean(data);
+		exit(1);
+	}
 	while (envp[i])
 	{
-		j = 0;
-		while (envp[i][j] == line[j])
-			j++;
-		if (line[j] == '\0')
-		{
-			free(line);
+		if (!ft_strncmp(envp[i], "PATH=", 5))
 			return (ft_split(envp[i] + 5, ':'));
-		}
 		i++;
 	}
-	free(line);
-	clean_exit(data, 1);
+	clean(data);
+	exit(1);
 	return (NULL);
 }
 
@@ -76,5 +72,6 @@ void	parsing(t_data *data, char *command, char **envp)
 	free_paths(linkcommand, paths);
 	free(command);
 	ft_putstr_fd("Command not found", 2);
-	clean_exit(data, 0);
+	clean(data);
+	exit(0);
 }
