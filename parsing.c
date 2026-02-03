@@ -6,7 +6,7 @@
 /*   By: enzorolinux <enzorolinux@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 14:07:55 by erocha--          #+#    #+#             */
-/*   Updated: 2026/02/02 21:25:37 by enzorolinux      ###   ########.fr       */
+/*   Updated: 2026/02/03 13:25:23 by enzorolinux      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	**the_line(t_data *data, char **envp)
 	return (NULL);
 }
 
-static void	free_paths(char *linkcommand, char **paths)
+static void	free_paths(char **paths)
 {
 	int	i;
 
@@ -40,8 +40,6 @@ static void	free_paths(char *linkcommand, char **paths)
 		i++;
 	}
 	free(paths);
-    if (linkcommand != NULL)
-	    free(linkcommand);
 }
 
 void	parsing(t_data *data, char *command, char **envp)
@@ -59,14 +57,15 @@ void	parsing(t_data *data, char *command, char **envp)
 		if (access(linkcommand, F_OK) == 0)
 		{
 			data->path = ft_strdup(linkcommand);
-			free_paths(linkcommand, paths);
+			free_paths(paths);
+            free(linkcommand);
 			free(command);
 			return ;
 		}
 		free(linkcommand);
         i++;
 	}
-	free_paths(linkcommand, paths);
+	free_paths(paths);
 	free(command);
 	ft_putstr_fd("Command not found\n", 2);
 	clean_exit(127, data);
