@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzorolinux <enzorolinux@student.42.fr>    +#+  +:+       +#+        */
+/*   By: erocha-- <erocha--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 15:53:14 by erocha--          #+#    #+#             */
-/*   Updated: 2026/02/02 20:19:50 by enzorolinux      ###   ########.fr       */
+/*   Updated: 2026/02/05 16:48:38 by erocha--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,15 @@ void	clean_exit(int code_error, t_data *data)
 {
 	if (data->command)
 		free_stacks(data->command);
-    if (data->path)
+	if (data->path)
 		free(data->path);
+	if (data->fd_infile > -1)
+		close(data->fd_infile);
+	if (data->fd_outfile > -1)
+		close(data->fd_outfile);
 	if (data->end[0] > 2)
 		close(data->end[0]);
 	if (data->end[1] > 2)
 		close(data->end[1]);
-    exit(code_error);
+	exit(code_error);
 }

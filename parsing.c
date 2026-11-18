@@ -3,31 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: enzorolinux <enzorolinux@student.42.fr>    +#+  +:+       +#+        */
+/*   By: erocha-- <erocha--@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 14:07:55 by erocha--          #+#    #+#             */
-/*   Updated: 2026/02/03 13:25:23 by enzorolinux      ###   ########.fr       */
+/*   Updated: 2026/02/06 09:24:15 by erocha--         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-static char	**the_line(t_data *data, char **envp)
-{
-	int	i;
-	
-	i = 0;
-	if (!envp)
-        clean_exit(1, data);
-	while (envp[i])
-	{
-		if (!ft_strncmp(envp[i], "PATH=", 5))
-			return (ft_split(envp[i] + 5, ':'));
-		i++;
-	}
-	clean_exit(1, data);
-	return (NULL);
-}
 
 static void	free_paths(char **paths)
 {
@@ -42,28 +25,50 @@ static void	free_paths(char **paths)
 	free(paths);
 }
 
+static char	**the_line(t_data *data, char **envp, char *command)
+{
+	int	i;
+
+	i = 0;
+	if (!envp)
+	{
+		free(command);
+		ft_putstr_fd("Command not found\n", 2);
+		clean_exit(127, data);
+	}
+	while (envp[i])
+	{
+		if (!ft_strncmp(envp[i], "PATH=", 5))
+			return (ft_split(envp[i] + 5, ':'));
+		i++;
+	}
+	free(command);
+	ft_putstr_fd("Command not found\n", 2);
+	clean_exit(127, data);
+	return (NULL);
+}
+
 void	parsing(t_data *data, char *command, char **envp)
 {
 	int		i;
-	char 	**paths;
-	char 	*linkcommand;
+	char	**paths;
+	char	*linkcommand;
 
-	paths = the_line(data, envp);
+	paths = the_line(data, envp, command);
 	i = 0;
-    linkcommand = NULL;
 	while (paths[i])
 	{
-        linkcommand = ft_strjoin(paths[i], command);
+		linkcommand = ft_strjoin(paths[i], command);
 		if (access(linkcommand, F_OK) == 0)
 		{
 			data->path = ft_strdup(linkcommand);
 			free_paths(paths);
-            free(linkcommand);
+			free(linkcommand);
 			free(command);
 			return ;
 		}
 		free(linkcommand);
-        i++;
+		i++;
 	}
 	free_paths(paths);
 	free(command);
